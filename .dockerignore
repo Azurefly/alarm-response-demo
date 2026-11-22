@@ -1,0 +1,6 @@
+.git
+runtime
+.env*
+node_modules
+docs
+*.log

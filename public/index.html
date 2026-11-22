@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>报警处置台</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">!</span><strong>报警处置台</strong><span class="env">设备演练</span></div>
+    <div class="session" id="session-bar" hidden>
+      <a id="project-link" target="_blank" rel="noopener">引擎工作区 ↗</a>
+      <span id="session-name"></span><button class="quiet" id="logout" type="button">退出</button>
+    </div>
+  </header>
+  <main>
+    <section class="login wrap" id="login" aria-labelledby="login-title">
+      <div class="login-card">
+        <h1 id="login-title">登录报警处置台</h1>
+        <p>使用设备报警处置演练项目的 Flow AI Engine 账号。</p>
+        <form id="login-form">
+          <label>账号<input name="username" autocomplete="username" required minlength="3" maxlength="64"></label>
+          <label>密码<input name="password" type="password" autocomplete="current-password" required minlength="12" maxlength="256"></label>
+          <div id="login-error" class="error" role="alert" hidden></div>
+          <button class="primary" type="submit">登录</button>
+        </form>
+      </div>
+    </section>
+    <section class="wrap" id="workspace" hidden aria-labelledby="board-title">
+      <div class="board-head">
+        <div><h1 id="board-title">报警台账</h1><p>登记设备报警，跟踪派发、处置和复核进度。</p></div>
+        <div class="toolbar"><button type="button" id="refresh">刷新</button><button type="button" id="new-alarm" class="primary">上报报警</button></div>
+      </div>
+      <nav class="flow-links" aria-label="已发布流程">
+        <a id="flow-control" target="_blank" rel="noopener"><b>控制</b> 分级派发 ↗</a>
+        <span aria-hidden="true">→</span>
+        <a id="flow-state" target="_blank" rel="noopener"><b>状态</b> 报警处置 ↗</a>
+        <span aria-hidden="true">→</span>
+        <a id="flow-data" target="_blank" rel="noopener"><b>数据</b> 结案统计 ↗</a>
+      </nav>
+      <div class="metrics">
+        <div><span>报警总数</span><strong id="total">0</strong></div>
+        <div><span>待结案</span><strong id="open">0</strong></div>
+        <div><span>已结案</span><strong id="closed">0</strong></div>
+      </div>
+      <div class="board">
+        <section class="card" aria-labelledby="list-title">
+          <div class="card-head"><h2 id="list-title">报警列表</h2><label class="filter">状态<select id="filter"><option value="all">全部</option><option value="open">待结案</option><option value="closed">已结案</option></select></label></div>
+          <table class="alarms"><thead><tr><th scope="col">设备报警</th><th scope="col">等级</th><th scope="col">当前状态</th><th scope="col">登记时间</th></tr></thead><tbody id="alarm-rows"></tbody></table>
+          <p class="empty" id="list-empty">暂无报警记录</p>
+        </section>
+        <section class="card detail" aria-labelledby="detail-title">
+          <div class="card-head"><h2 id="detail-title">处置详情</h2><span id="detail-phase"></span></div>
+          <div id="alarm-detail" class="detail-body"><p class="empty">请选择一条报警。</p></div>
+        </section>
+      </div>
+      <section class="card reports" aria-labelledby="report-title">
+        <div class="card-head"><div><h2 id="report-title">结案统计</h2><p>按报警等级和结案结果汇总，耗时按受理到结案计算。</p></div><button type="button" id="generate-report">生成统计</button></div>
+        <div id="report-content"><p class="empty">暂无统计。</p></div>
+      </section>
+    </section>
+  </main>
+  <div id="notice" class="notice" role="status" hidden></div>
+  <dialog id="alarm-dialog" aria-labelledby="new-title">
+    <form id="alarm-form">
+      <div class="dialog-head"><h2 id="new-title">上报报警</h2><button type="button" class="quiet" id="close-alarm">关闭</button></div>
+      <div class="samples"><button type="button" data-sample="high">填入温度越限样例</button><button type="button" data-sample="normal">填入通信离线样例</button></div>
+      <label>报警标题<input name="title" required maxlength="80"></label>
+      <div class="inline-fields"><label>设备编号<input name="device" required maxlength="64"></label><label>区域<input name="zone" required maxlength="64"></label></div>
+      <label>等级<select name="severity" required><option value="normal">常规</option><option value="high">高优先级</option></select></label>
+      <label>现场描述<textarea name="description" maxlength="600" rows="3"></textarea></label>
+      <div id="alarm-error" class="error" role="alert" hidden></div>
+      <div class="toolbar"><button type="submit" class="primary">提交并派发</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

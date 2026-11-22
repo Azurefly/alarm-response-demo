@@ -1,0 +1,9 @@
+.env
+.env.*
+runtime/
+accounts.json
+config.json
+setup.json
+ledger.json
+*.log
+node_modules/
